@@ -204,16 +204,18 @@ export default class Gantt {
                 return task;
             })
             .filter((t) => t);
-        
+
         this.groups = this.tasks;
         if (this.options?.enable_grouping) {
             // the groups are the union of the specified groups and the groups
             // from the tasks.
-            let groupset = new Set()
+            let groupset = new Set();
             if (this.options?.groups) {
                 groupset = groupset.union(new Set(this.options.groups));
             }
-            const extendedset = groupset.union(new Set(this.tasks.map((t) => t.group)));
+            const extendedset = groupset.union(
+                new Set(this.tasks.map((t) => t.group)),
+            );
             this.groups = Array.from(extendedset);
 
             // the index of the tasks depend on the groups array. This allows
@@ -223,7 +225,6 @@ export default class Gantt {
             for (let task of this.tasks) {
                 task._index = this.groups.indexOf(task.group);
             }
-
         }
         this.setup_dependencies();
     }
@@ -461,7 +462,7 @@ export default class Gantt {
         for (let _ of this.groups) {
             createSVG('rect', {
                 x: 0,
-                y : row_y,
+                y: row_y,
                 width: row_width,
                 height: row_height,
                 class: 'grid-row',
@@ -469,9 +470,9 @@ export default class Gantt {
             });
 
             row_y += row_height;
-            
+
             if (row_y >= this.grid_height) {
-              break;
+                break;
             }
         }
     }
@@ -541,8 +542,8 @@ export default class Gantt {
         if (this.options.lines === 'none') return;
         let tick_x = 0;
         let tick_y = this.config.header_height;
-        let tick_height = (this.grid_height - this.config.header_height)*
-            this.groups.length;
+        let tick_height =
+            (this.grid_height - this.config.header_height) * this.groups.length;
 
         let $lines_layer = createSVG('g', {
             class: 'lines_layer',
@@ -564,9 +565,9 @@ export default class Gantt {
                     append_to: $lines_layer,
                 });
                 row_y += row_height;
-                
+
                 if (row_y >= this.grid_height) {
-                  break;
+                    break;
                 }
             }
         }
